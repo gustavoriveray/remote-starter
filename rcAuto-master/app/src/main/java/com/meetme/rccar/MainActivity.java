@@ -7,36 +7,80 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import butterknife.ButterKnife;
+import butterknife.InjectView;
 import butterknife.OnClick;
 
 
 public class MainActivity extends Activity {
 
+    private boolean settingsShowing = false;
+
+    @InjectView(R.id.buttons_container)
+    LinearLayout buttonsContainer;
+
+    @InjectView(R.id.settings_container)
+    LinearLayout settingsContainer;
+
+    @InjectView(R.id.phone_number)
+    EditText phoneNumberView;
+
+    private SharedPreferences prefs;
+    private String SHARED_PREFS_KEY = "RCCAR_PHONE_NUMBER";
+
+    private String phoneNumber;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        prefs = this.getSharedPreferences(
+                "com.meetme.rccar", Context.MODE_PRIVATE);
+
+        phoneNumber = prefs.getString(SHARED_PREFS_KEY,"");
+
         setContentView(R.layout.main);
         ButterKnife.inject(this);
     }
 
     @OnClick(R.id.turn_on) void turnOn() {
-        sendSMS("EnterNumberHere", "Turn On");
+        sendSMS(phoneNumber, "Start");
     }
     @OnClick(R.id.open) void open() {
-        sendSMS("EnterNumberHere", "Open");
+        sendSMS(phoneNumber, "Open");
     }
     @OnClick(R.id.close) void close() {
-        sendSMS("EnterNumberHere", "Close");
+        sendSMS(phoneNumber, "Close");
+    }
+    @OnClick(R.id.button_okay) void save() {
+        phoneNumber = phoneNumberView.getText().toString();
+
+        prefs.edit().putString(SHARED_PREFS_KEY,phoneNumber).apply();
+        settingsShowing = false;
+        settingsContainer.setVisibility(View.INVISIBLE);
+        buttonsContainer.setVisibility(View.VISIBLE);
     }
 
+    @Override
+    public void onBackPressed() {
+        if(settingsShowing) {
+            settingsShowing = false;
+            settingsContainer.setVisibility(View.INVISIBLE);
+            buttonsContainer.setVisibility(View.VISIBLE);
+        } else {
+            super.onBackPressed();
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -53,11 +97,11 @@ public class MainActivity extends Activity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-            fragmentTransaction.add(R.id.container, new SettingsFragment());
-            fragmentTransaction.addToBackStack("settings");
-            fragmentTransaction.commit();
+        if (id == R.id.action_settings && !settingsShowing) {
+            phoneNumberView.setText(phoneNumber);
+            settingsShowing = true;
+            settingsContainer.setVisibility(View.VISIBLE);
+            buttonsContainer.setVisibility(View.INVISIBLE);
             return true;
         }
 

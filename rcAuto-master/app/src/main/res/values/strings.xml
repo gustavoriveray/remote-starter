@@ -4,5 +4,6 @@
     <string name="app_name">rcAuto</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="phone_number_label">Phone Number</string>
 
 </resources>

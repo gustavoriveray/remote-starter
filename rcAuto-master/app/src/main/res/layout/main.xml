@@ -14,35 +14,62 @@
         android:layout_height="match_parent"
     >
         <LinearLayout
+            android:id="@+id/buttons_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
+            android:visibility="visible"
         >
-            <Button
+            <ImageButton
                 android:id="@+id/turn_on"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="Turn On"
-                android:textSize="20dip"
+                android:src="@drawable/power"
+                android:scaleType="fitCenter"
+                android:padding="50dp"
                 />
-            <Button
+            <ImageButton
                 android:id="@+id/open"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="Open"
-                android:textSize="20dip"
+                android:src="@drawable/unlock"
+                android:scaleType="fitCenter"
+                android:padding="50dp"
                 />
-            <Button
+            <ImageButton
                 android:id="@+id/close"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="Close"
-                android:textSize="20dip"
+                android:src="@drawable/lock"
+                android:scaleType="fitCenter"
+                android:padding="50dp"
                 />
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/settings_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="invisible">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/phone_number_label"/>
+            <EditText
+                android:id="@+id/phone_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="phone" />
+            <Button
+                android:id="@+id/button_okay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ok"/>
+            </LinearLayout>
 
     </RelativeLayout>
 
